@@ -1,0 +1,49 @@
+{
+  "name": "clicker",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/clicker/src",
+  "targets": {
+    "build": {
+      "command": "npm run build",
+      "options": {
+        "cwd": "{projectRoot}"
+      },
+      "outputs": ["{projectRoot}/build"],
+      "dependsOn": ["^build"]
+    },
+    "sync": {
+      "command": "svelte-kit sync",
+      "options": {
+        "cwd": "{projectRoot}"
+      },
+      "outputs": ["{projectRoot}/.svelte-kit/tsconfig.json"]
+    },
+    "lint": {
+      "command": "npm run lint",
+      "options": {
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["sync"]
+    },
+    "test": {
+      "command": "npm run test",
+      "options": {
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["sync"]
+    },
+    "validate": {
+      "command": "echo ok",
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    },
+    "dev": {
+      "command": "npm run dev",
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    }
+  }
+}

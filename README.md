@@ -10,9 +10,34 @@ Clicker lets users create named datasets ("clickers") and record timestamped eve
 
 ---
 
+## Getting Started
+
+This project uses [Bun](https://bun.sh) as the package manager. Install it with:
+
+```sh
+curl -fsSL https://bun.sh/install | bash
+```
+
+Then install dependencies and run the dev server:
+
+```sh
+bun install
+bunx nx run clicker:dev
+```
+
+Common tasks:
+
+| Command | Description |
+|---|---|
+| `bunx nx run-many --target=validate` | Lint + test all projects |
+| `bunx nx run-many --target=build` | Build all projects |
+| `bunx nx run clicker:dev` | Start the SvelteKit dev server |
+
+---
+
 ## Monorepo Structure
 
-This repo is managed with [Nx](https://nx.dev).
+This repo is managed with [Nx](https://nx.dev) and [Bun workspaces](https://bun.sh/docs/install/workspaces).
 
 ```
 /
@@ -68,12 +93,13 @@ Schemas are defined as AT Protocol Lexicons in the `clicker` app and cover:
 
 ## CI/CD
 
-On push to `main`, GitHub Actions runs a single workflow with two stages:
+Both workflows use `oven-sh/setup-bun` and `bun install --frozen-lockfile` for fast, reproducible installs.
 
-1. **Parallel:** `nx run-many` executes `validate` and `build` across all projects simultaneously — this covers schema validation, package builds, and the SvelteKit site build
-2. **Deploy:** Only if stage 1 passes, deploy the built SvelteKit output to GitHub Pages
+**PR checks** (`pr.yml`): runs `nx run-many --target=validate` (lint + test) on every pull request.
 
-The workflow uses `nx run-many`, not a matrix strategy, to manage parallelism.
+**Deploy** (`deploy.yml`): on push to `main`, runs `nx run-many --target=build` then deploys the SvelteKit static output to GitHub Pages.
+
+Both use `nx run-many` (not a matrix strategy) to manage parallelism across projects.
 
 ---
 
