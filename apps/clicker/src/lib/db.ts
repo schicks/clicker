@@ -19,6 +19,11 @@ export function getDb(): Promise<AtprotoIdb> {
   return dbPromise;
 }
 
+/** For tests only: reset the singleton so the next getDb() opens a fresh connection. */
+export function _resetDb(): void {
+  dbPromise = null;
+}
+
 export interface ClickerRecord {
   rkey: string;
   name: string;
