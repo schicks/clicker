@@ -20,16 +20,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
+      - uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
-        run: npm ci
+        run: bun install --frozen-lockfile
 
       - name: Build all projects
-        run: npx nx run-many --target=build --parallel
+        run: bunx nx run-many --target=build --parallel
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
