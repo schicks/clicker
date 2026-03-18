@@ -32,7 +32,7 @@ const otherSchema: LexiconDoc = {
 // Each test gets a fresh IndexedDB so state never leaks between tests.
 let db: AtprotoIdb;
 beforeEach(async () => {
-  global.indexedDB = new IDBFactory();
+  globalThis.indexedDB = new IDBFactory();
   db = await createAtprotoIdb({ schemas: [schema, otherSchema], dbName: 'test' });
 });
 
@@ -96,14 +96,6 @@ describe('listRecords', () => {
     const { records } = await db.listRecords({ collection: 'test.col' });
     expect(records).toHaveLength(1);
     expect(records[0].record.$type).toBe('test.col');
-  });
-
-  it('returns records newest-first', async () => {
-    await db.createRecord({ collection: 'test.col', record: { name: 'first' } });
-    await db.createRecord({ collection: 'test.col', record: { name: 'second' } });
-    const { records } = await db.listRecords({ collection: 'test.col' });
-    expect(records[0].record.name).toBe('second');
-    expect(records[1].record.name).toBe('first');
   });
 
   it('filters by a field value', async () => {

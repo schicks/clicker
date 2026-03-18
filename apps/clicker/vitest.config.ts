@@ -5,6 +5,7 @@ import { resolve } from 'path';
 export default defineConfig({
   plugins: [svelte({ hot: false })],
   resolve: {
+    conditions: ['browser'],
     alias: {
       '$app/paths': resolve(__dirname, './src/__mocks__/paths.ts'),
       '$app/stores': resolve(__dirname, './src/__mocks__/stores.ts'),

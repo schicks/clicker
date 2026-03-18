@@ -16,7 +16,7 @@
     const db = await getDb();
     const rec = await db.getRecord({ collection: COLLECTIONS.CLICKER, rkey: id });
     if (rec) {
-      const r = rec.record as { name: string };
+      const r = rec.record as unknown as { name: string };
       name = r.name;
       count = await db.countRecords(COLLECTIONS.EVENT, { clickerId: id });
     }

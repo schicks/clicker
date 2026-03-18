@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/svelte';
-import Page from './+page.svelte';
+import Page from '../routes/+page.svelte';
 import { getDb, COLLECTIONS } from '$lib/db';
 
 describe('Home page', () => {
@@ -64,7 +64,7 @@ describe('Home page', () => {
     await waitFor(() => screen.getByText('To Delete'));
 
     // Suppress the confirm dialog and auto-accept.
-    global.confirm = () => true;
+    globalThis.confirm = () => true;
     await fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
 
     await waitFor(() => {

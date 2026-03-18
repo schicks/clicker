@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/svelte';
 import { get } from 'svelte/store';
 import { page } from '$app/stores';
-import Page from './+page.svelte';
+import Page from '../routes/clicker/[id]/+page.svelte';
 import { getDb, COLLECTIONS } from '$lib/db';
 
 async function seedClicker(name: string): Promise<string> {

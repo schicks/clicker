@@ -18,7 +18,7 @@
     const { records } = await db.listRecords({ collection: COLLECTIONS.CLICKER, limit: 100 });
     const withCounts = await Promise.all(
       records.map(async (r) => {
-        const rec = r.record as { name: string; createdAt: string };
+        const rec = r.record as unknown as { name: string; createdAt: string };
         const count = await db.countRecords(COLLECTIONS.EVENT, { clickerId: r.rkey });
         return { rkey: r.rkey, name: rec.name, createdAt: rec.createdAt, count };
       })
@@ -74,7 +74,7 @@
         filter: { clickerId: rkey },
       });
       for (const r of records) {
-        const rec = r.record as { timestamp: string };
+        const rec = r.record as unknown as { timestamp: string };
         rows.push(rec.timestamp);
       }
       cursor = next;

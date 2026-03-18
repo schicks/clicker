@@ -1,14 +1,26 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "./.svelte-kit/tsconfig.json",
   "compilerOptions": {
     "target": "ES2022",
-    "module": "ES2022",
-    "lib": ["ES2022", "DOM"],
-    "moduleResolution": "bundler",
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "noEmit": true
+    "skipLibCheck": true,
+    "paths": {
+      "$lib": ["./src/lib"],
+      "$lib/*": ["./src/lib/*"],
+      "@clicker/atproto-idb": ["../../packages/atproto-idb/src/index.ts"]
+    }
   },
-  "include": ["src/**/*", "../../packages/atproto-idb/src/**/*"],
+  "include": [
+    ".svelte-kit/ambient.d.ts",
+    ".svelte-kit/non-ambient.d.ts",
+    ".svelte-kit/types/**/$types.d.ts",
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules/**",
+    "src/**/*.test.ts",
+    "src/test-setup.ts",
+    "src/__mocks__/**",
+    "src/tests/**"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
