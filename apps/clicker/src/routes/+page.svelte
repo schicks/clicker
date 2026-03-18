@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { base } from '$app/paths';
   import { getDb, COLLECTIONS, type ClickerRecord } from '$lib/db';
 
@@ -8,8 +7,8 @@
   let newName = $state('');
   let creating = $state(false);
 
-  onMount(async () => {
-    await loadClickers();
+  $effect(() => {
+    loadClickers();
   });
 
   async function loadClickers() {
