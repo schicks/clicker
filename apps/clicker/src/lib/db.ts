@@ -15,6 +15,11 @@ export function getDb(): Promise<AtprotoIdb> {
       schemas: [clickerSchema, eventSchema],
       dbName: 'clicker-app',
     });
+    // Clear the cached promise on failure so the next call can retry rather
+    // than permanently returning the same rejected promise.
+    dbPromise.catch(() => {
+      dbPromise = null;
+    });
   }
   return dbPromise;
 }
