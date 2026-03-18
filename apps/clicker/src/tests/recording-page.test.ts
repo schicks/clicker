@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/svelte';
 import { get } from 'svelte/store';
 import { page } from '$app/stores';
@@ -69,6 +69,23 @@ describe('Recording page', () => {
     const db = await getDb();
     const count = await db.countRecords(COLLECTIONS.EVENT, { clickerId: rkey });
     expect(count).toBe(1);
+  });
+
+  it('clears loading state when a DB operation throws during initial load', async () => {
+    const rkey = await seedClicker('Error Case');
+    page.set({ params: { id: rkey }, url: get(page).url });
+
+    const db = await getDb();
+    // Make getRecord throw on the next call (simulates a DB error on the detail page)
+    vi.spyOn(db, 'getRecord').mockRejectedValueOnce(new Error('DB error'));
+
+    render(Page);
+
+    // Without try-finally in onMount, loading would be stuck on "Loading…" forever
+    // and there would be no interactive elements to escape it.
+    await waitFor(() => {
+      expect(screen.queryByText('Loading…')).not.toBeInTheDocument();
+    });
   });
 
   it('reflects pre-existing events in the initial count', async () => {
