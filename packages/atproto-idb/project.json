@@ -11,8 +11,20 @@
       },
       "outputs": ["{projectRoot}/dist"]
     },
+    "lint": {
+      "command": "npm run lint",
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test": {
+      "command": "npm run test",
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    },
     "validate": {
-      "command": "npm run validate",
+      "command": "echo ok",
       "options": {
         "cwd": "{projectRoot}"
       }

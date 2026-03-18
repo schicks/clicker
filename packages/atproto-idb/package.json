@@ -9,7 +9,8 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.lib.json",
-    "validate": "tsc -p tsconfig.json --noEmit"
+    "lint": "tsc -p tsconfig.json --noEmit",
+    "test": "echo 'no tests'"
   },
   "dependencies": {
     "idb": "^8.0.0"

@@ -7,6 +7,12 @@
       "cache": true
     },
     "validate": {
+      "dependsOn": ["lint", "test"]
+    },
+    "lint": {
+      "cache": true
+    },
+    "test": {
       "cache": true
     }
   }

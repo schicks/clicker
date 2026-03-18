@@ -1,4 +1,4 @@
-name: CI & Deploy
+name: Deploy
 
 on:
   push:
@@ -14,8 +14,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  ci:
-    name: Validate & Build
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,8 +28,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run validate and build in parallel
-        run: npx nx run-many --target=validate,build --parallel
+      - name: Build all projects
+        run: npx nx run-many --target=build --parallel
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
@@ -38,7 +38,7 @@ jobs:
 
   deploy:
     name: Deploy to GitHub Pages
-    needs: ci
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
