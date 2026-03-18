@@ -1,0 +1,21 @@
+{
+  "name": "atproto-idb",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/atproto-idb/src",
+  "targets": {
+    "build": {
+      "command": "npm run build",
+      "options": {
+        "cwd": "{projectRoot}"
+      },
+      "outputs": ["{projectRoot}/dist"]
+    },
+    "validate": {
+      "command": "npm run validate",
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    }
+  }
+}

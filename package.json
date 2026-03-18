@@ -1,0 +1,14 @@
+{
+  "name": "@clicker/source",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "build": "nx run-many --target=build",
+    "validate": "nx run-many --target=validate"
+  },
+  "devDependencies": {
+    "nx": "^20.0.0",
+    "typescript": "^5.7.0"
+  }
+}
