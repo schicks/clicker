@@ -29,5 +29,8 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      - name: Install Cypress binary
+        run: bunx cypress install
+
       - name: Run E2E tests against built site
         run: bunx nx run clicker:e2e

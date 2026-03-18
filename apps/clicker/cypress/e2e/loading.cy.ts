@@ -1,13 +1,15 @@
 describe('Loading states', () => {
-  it('home page exits loading state and shows content', () => {
+  it('home page exits loading state and shows empty list', () => {
     cy.visit('/');
-    cy.contains('Loading…', { timeout: 10000 }).should('not.exist');
-    cy.get('h2').contains('Your Clickers').should('be.visible');
+    // In a fresh browser there are no clickers, so once loading clears the
+    // empty-state message must appear.  If loading is stuck this times out.
+    cy.contains('No clickers yet. Create one above.', { timeout: 10000 }).should('be.visible');
   });
 
   it('recording page exits loading state for unknown clicker id', () => {
     cy.visit('/clicker/does-not-exist');
-    cy.contains('Loading…', { timeout: 10000 }).should('not.exist');
-    cy.contains('Clicker not found').should('be.visible');
+    // The record won't be found, so once loading clears "Clicker not found"
+    // must appear.  If loading is stuck this times out.
+    cy.contains('Clicker not found', { timeout: 10000 }).should('be.visible');
   });
 });
