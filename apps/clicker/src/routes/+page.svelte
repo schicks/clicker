@@ -14,17 +14,22 @@
 
   async function loadClickers() {
     loading = true;
-    const db = await getDb();
-    const { records } = await db.listRecords({ collection: COLLECTIONS.CLICKER, limit: 100 });
-    const withCounts = await Promise.all(
-      records.map(async (r) => {
-        const rec = r.record as unknown as { name: string; createdAt: string };
-        const count = await db.countRecords(COLLECTIONS.EVENT, { clickerId: r.rkey });
-        return { rkey: r.rkey, name: rec.name, createdAt: rec.createdAt, count };
-      })
-    );
-    clickers = withCounts;
-    loading = false;
+    try {
+      const db = await getDb();
+      const { records } = await db.listRecords({ collection: COLLECTIONS.CLICKER, limit: 100 });
+      const withCounts = await Promise.all(
+        records.map(async (r) => {
+          const rec = r.record as unknown as { name: string; createdAt: string };
+          const count = await db.countRecords(COLLECTIONS.EVENT, { clickerId: r.rkey });
+          return { rkey: r.rkey, name: rec.name, createdAt: rec.createdAt, count };
+        })
+      );
+      clickers = withCounts;
+    } catch {
+      // On error, clickers remains unchanged and loading is cleared by finally
+    } finally {
+      loading = false;
+    }
   }
 
   async function createClicker() {

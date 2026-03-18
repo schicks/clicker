@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/svelte';
 import Page from '../routes/+page.svelte';
 import { getDb, COLLECTIONS } from '$lib/db';
@@ -69,6 +69,25 @@ describe('Home page', () => {
 
     await waitFor(() => {
       expect(screen.queryByText('To Delete')).not.toBeInTheDocument();
+    });
+  });
+
+  it('clears loading state when a DB operation throws during initial load', async () => {
+    // Seed a clicker so countRecords will be called during loadClickers
+    const db = await getDb();
+    await db.createRecord({
+      collection: COLLECTIONS.CLICKER,
+      record: { name: 'Existing', createdAt: new Date().toISOString() },
+    });
+
+    // Make countRecords throw on the next call (simulates a DB error)
+    vi.spyOn(db, 'countRecords').mockRejectedValueOnce(new Error('DB error'));
+
+    render(Page);
+
+    // Without try-finally in loadClickers, loading would be stuck on "Loading…" forever.
+    await waitFor(() => {
+      expect(screen.queryByText('Loading…')).not.toBeInTheDocument();
     });
   });
 
