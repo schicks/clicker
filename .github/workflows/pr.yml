@@ -17,3 +17,20 @@ jobs:
 
       - name: Validate all projects (lint + test)
         run: bunx nx run-many --target=validate --parallel
+
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install Cypress binary
+        run: bunx cypress install
+
+      - name: Run E2E tests against built site
+        run: bunx nx run clicker:e2e

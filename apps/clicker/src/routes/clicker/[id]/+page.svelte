@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { page } from '$app/stores';
   import { base } from '$app/paths';
   import { getDb, COLLECTIONS } from '$lib/db';
@@ -12,20 +11,26 @@
   let recording = $state(false);
   let lastTimestamp = $state<string | null>(null);
 
-  onMount(async () => {
-    try {
-      const db = await getDb();
-      const rec = await db.getRecord({ collection: COLLECTIONS.CLICKER, rkey: id });
-      if (rec) {
-        const r = rec.record as unknown as { name: string };
-        name = r.name;
-        count = await db.countRecords(COLLECTIONS.EVENT, { clickerId: id });
+  $effect(() => {
+    // Reading id here makes the effect re-run if the clicker changes via SPA navigation.
+    const clickerId = id;
+    loading = true;
+    name = '';
+    (async () => {
+      try {
+        const db = await getDb();
+        const rec = await db.getRecord({ collection: COLLECTIONS.CLICKER, rkey: clickerId });
+        if (rec) {
+          const r = rec.record as unknown as { name: string };
+          name = r.name;
+          count = await db.countRecords(COLLECTIONS.EVENT, { clickerId: clickerId });
+        }
+      } catch {
+        // On error, name stays '' → shows "not found"
+      } finally {
+        loading = false;
       }
-    } catch {
-      // On error, name stays '' and loading is cleared by finally → shows "not found"
-    } finally {
-      loading = false;
-    }
+    })();
   });
 
   async function recordEvent() {
